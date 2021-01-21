@@ -3,6 +3,7 @@
 
 
 using Marvin.IDP.DbContexts;
+using Marvin.IDP.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ namespace Marvin.IDP
             {
                 options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=MarvinIdentityDB;Trusted_Connection=True;");
             });
+
+            services.AddScoped<ILocalUserService, LocalUserService>();
 
             var builder = services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.Ids)
