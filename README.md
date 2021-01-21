@@ -6,5 +6,5 @@
 
 ## Some notes
 
-Add-Migration InitialMigration
+Add-Migration InitialMigration  
 Update-Database
