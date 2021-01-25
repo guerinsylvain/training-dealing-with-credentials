@@ -19,11 +19,7 @@ namespace Marvin.IDP
                 new IdentityResource(
                     "country",
                     "The country you're living in",
-                    new List<string>() { "country" }),
-                new IdentityResource(
-                    "subscriptionlevel",
-                    "Your subscription level",
-                    new List<string>() { "subscriptionlevel" })
+                    new List<string>() { "country" })
             };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -65,8 +61,7 @@ namespace Marvin.IDP
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
                         "imagegalleryapi",
-                        "country",
-                        "subscriptionlevel"
+                        "country"
                     },
                     ClientSecrets =
                     {

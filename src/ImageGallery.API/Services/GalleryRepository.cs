@@ -56,6 +56,21 @@ namespace ImageGallery.API.Services
             // the actual files as well) for demo purposes.
         }
 
+        public ApplicationUserProfile GetApplicationUserProfile(string subject)
+        {
+            return _context.ApplicationUserProfiles.FirstOrDefault(a => a.Subject == subject);
+        }
+
+        public bool ApplicationUserProfileExists(string subject)
+        {
+            return _context.ApplicationUserProfiles.Any(a => a.Subject == subject);
+        }
+
+        public void AddApplicationUserProfile(ApplicationUserProfile applicationUserProfile)
+        {
+            _context.ApplicationUserProfiles.Add(applicationUserProfile);
+        }
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

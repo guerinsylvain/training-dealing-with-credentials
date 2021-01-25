@@ -14,5 +14,9 @@ namespace ImageGallery.API.Services
         void UpdateImage(Image image);
         void DeleteImage(Image image);
         bool Save();
+
+        ApplicationUserProfile GetApplicationUserProfile(string subject);
+        void AddApplicationUserProfile(ApplicationUserProfile applicationUserProfile);
+        bool ApplicationUserProfileExists(string subject);
     }
 }
