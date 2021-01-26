@@ -238,58 +238,58 @@ namespace Marvin.IDP.Services
         //        .FirstOrDefaultAsync(u => u.User.Subject == subject && u.Name == name);
         //}
 
-        //public async Task<string> InitiatePasswordResetRequest(string email)
-        //{
-        //    if (string.IsNullOrWhiteSpace(email))
-        //    {
-        //        throw new ArgumentNullException(nameof(email));
-        //    }
+        public async Task<string> InitiatePasswordResetRequest(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
 
-        //    var user = await _context.Users.FirstOrDefaultAsync(u =>
-        //      u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+              u.Email == email);
 
-        //    if (user == null)
-        //    {
-        //        throw new Exception($"User with email address {email} can't be found.");
-        //    }
+            if (user == null)
+            {
+                throw new Exception($"User with email address {email} can't be found.");
+            }
 
-        //    using (var randomNumberGenerator = new RNGCryptoServiceProvider())
-        //    {
-        //        var securityCodeData = new byte[128];
-        //        randomNumberGenerator.GetBytes(securityCodeData);
-        //        user.SecurityCode = Convert.ToBase64String(securityCodeData);
-        //    }
+            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            {
+                var securityCodeData = new byte[128];
+                randomNumberGenerator.GetBytes(securityCodeData);
+                user.SecurityCode = Convert.ToBase64String(securityCodeData);
+            }
 
-        //    user.SecurityCodeExpirationDate = DateTime.UtcNow.AddHours(1);
-        //    return user.SecurityCode;
-        //}
+            user.SecurityCodeExpirationDate = DateTime.UtcNow.AddHours(1);
+            return user.SecurityCode;
+        }
 
-        //public async Task<bool> SetPassword(string securityCode, string password)
-        //{
-        //    if (string.IsNullOrWhiteSpace(securityCode))
-        //    {
-        //        throw new ArgumentNullException(nameof(securityCode));
-        //    }
+        public async Task<bool> SetPassword(string securityCode, string password)
+        {
+            if (string.IsNullOrWhiteSpace(securityCode))
+            {
+                throw new ArgumentNullException(nameof(securityCode));
+            }
 
-        //    if (string.IsNullOrWhiteSpace(password))
-        //    {
-        //        throw new ArgumentNullException(nameof(password));
-        //    }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
 
-        //    var user = await _context.Users.FirstOrDefaultAsync(u =>
-        //    u.SecurityCode == securityCode &&
-        //    u.SecurityCodeExpirationDate >= DateTime.UtcNow);
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+            u.SecurityCode == securityCode &&
+            u.SecurityCodeExpirationDate >= DateTime.UtcNow);
 
-        //    if (user == null)
-        //    {
-        //        return false;
-        //    }
+            if (user == null)
+            {
+                return false;
+            }
 
-        //    user.SecurityCode = null;
-        //    // hash & salt the password
-        //    user.Password = _passwordHasher.HashPassword(user, password);
-        //    return true;        
-        //}
+            user.SecurityCode = null;
+            // hash & salt the password
+            user.Password = _passwordHasher.HashPassword(user, password);
+            return true;
+        }
 
         //public async Task<User> GetUserByExternalProvider(
         //    string provider, 
