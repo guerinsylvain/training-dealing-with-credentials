@@ -55,6 +55,24 @@ namespace Marvin.IDP.UserRegistration
             return View(vm);
         }
 
+        public async Task<IActionResult> ActivateUser(string securityCode)
+        {
+            if (await _localUserService.ActivateUser(securityCode))
+            {
+                ViewData["Message"] = "Your account was successfully activated.  " +
+                                      "Navigate to your client application to log in.";
+            }
+            else
+            {
+                ViewData["Message"] = "Your account couldn't be activated, " +
+                                      "please contact your administrator.";
+            }
+
+            await _localUserService.SaveChangesAsync();
+
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
@@ -69,7 +87,7 @@ namespace Marvin.IDP.UserRegistration
                 Username = model.UserName,
                 Subject = Guid.NewGuid().ToString(),
                 Email = model.Email,
-                Active = true
+                Active = false
             };
 
             userToCreate.Claims.Add(new Entities.UserClaim()
@@ -100,28 +118,24 @@ namespace Marvin.IDP.UserRegistration
             await _localUserService.SaveChangesAsync();
 
 
-            //_localUserService.AddUser(userToCreate, model.Password);
-            //await _localUserService.SaveChangesAsync();
+            // create an activation link
+            var link = Url.ActionLink("ActivateUser", "UserRegistration", new { securityCode = userToCreate.SecurityCode });
 
-            //// create an activation link
-            //var link = Url.ActionLink("ActivateUser", "UserRegistration",
-            //    new { securityCode = userToCreate.SecurityCode });
+            Debug.WriteLine(link);
 
-            //Debug.WriteLine(link);
+            return View("ActivationCodeSent");
 
-            //return View("ActivationCodeSent");
+            //// log the user in
+            //await HttpContext.SignInAsync(userToCreate.Subject, userToCreate.Username);
 
-            // log the user in
-            await HttpContext.SignInAsync(userToCreate.Subject, userToCreate.Username);
+            //// continue with the flow     
+            //if (_interaction.IsValidReturnUrl(model.ReturnUrl)
+            //    || Url.IsLocalUrl(model.ReturnUrl))
+            //{
+            //    return Redirect(model.ReturnUrl);
+            //}
 
-            // continue with the flow     
-            if (_interaction.IsValidReturnUrl(model.ReturnUrl)
-                || Url.IsLocalUrl(model.ReturnUrl))
-            {
-                return Redirect(model.ReturnUrl);
-            }
-
-            return Redirect("~/");
+            //return Redirect("~/");
         }
 
         //[HttpGet]
