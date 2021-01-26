@@ -66,10 +66,9 @@ namespace Marvin.IDP.UserRegistration
 
             var userToCreate = new Entities.User
             {
-                Password = model.Password,
                 Username = model.UserName,
                 Subject = Guid.NewGuid().ToString(),
-                //Email = model.Email,
+                Email = model.Email,
                 Active = true
             };
 
@@ -97,7 +96,7 @@ namespace Marvin.IDP.UserRegistration
                 Value = model.FamilyName
             });
 
-            _localUserService.AddUser((userToCreate));
+            _localUserService.AddUser(userToCreate, model.Password);
             await _localUserService.SaveChangesAsync();
 
 
